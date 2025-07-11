@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 
+@Profile("!test")
 @Service
 public class WeatherProducer {
 
@@ -33,7 +35,7 @@ public class WeatherProducer {
         this.topic = topic;
     }
 
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(initialDelay = 10000, fixedRate = 2000) // задержка для того чтобы все логи создания контейнеров прошли
     public void sendWeatherData() {
         WeatherData data = generateRandomWeatherData();
         try {

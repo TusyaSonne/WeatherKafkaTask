@@ -23,7 +23,7 @@ public class WeatherAnalyticsService {
         }
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(initialDelay = 10000, fixedRate = 10000) // задержка для того чтобы все логи создания контейнеров прошли
     public synchronized void printStats() {
         System.out.println("\n Аналитика за последнее время:");
 
@@ -55,5 +55,13 @@ public class WeatherAnalyticsService {
             System.out.printf(" Самый жаркий день: %s в %s (%.1f°C)%n",
                     hottest.getDate(), hottest.getCity(), (double) hottest.getTemperature());
         }
+    }
+
+    public WeatherData getHottest() {
+        return hottest;
+    }
+
+    public synchronized List<WeatherData> getCityData(String city) {
+        return cityDataMap.getOrDefault(city, List.of());
     }
 }
